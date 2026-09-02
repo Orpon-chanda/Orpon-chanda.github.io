@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Orpon Chanda — Lab Assistant, Leading University, Sylhet | Embedded & Robotics</title>
+<meta name="description" content="Orpon Chanda — Lab Assistant at Leading University, Sylhet. Embedded systems, PID line followers, Arduino, robotics. 8 open-source hardware projects."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:opsz,ital,wght@9..144,0,800;9..144,1,800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --paper:#FFFBF5;
+  --ink:#0A0A0E;
+  --ink2:#1A1A1E;
+  --muted:#6B6B74;
+  --line:#E8E0D6;
+  --line2:#D9D0C2;
+  --accent:#FF3B1F;
+  --accent2:#FFB800;
+  --accent3:#0EA5E9;
+  --grid:#F0EBE1;
+  --card:#FFFFFF;
+  --radius:0;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Space Grotesk", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit; text-decoration:none}
+img{max-width:100%; display:block}
+/* thin blueprint grid */
+.bg-grid{
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:32px 32px;
+}
+/* hazard stripe */
+.hazard{
+  height:14px; background:repeating-linear-gradient(135deg, #111 0 14px, #FFB800 14px 28px);
+  border-top:1.5px solid #111; border-bottom:1.5px solid #111;
+}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 20px; border-bottom:1.5px solid #111; background:#fff;
+  font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+}
+.topbar b{font-weight:700}
+.nav{
+  position:sticky; top:0; z-index:40;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 20px; background:rgba(255,251,245,.92); backdrop-filter:blur(8px);
+  border-bottom:1.5px solid #111;
+}
+.brand{
+  display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:-.02em;
+}
+.mark{
+  width:36px; height:36px; background:#111; color:#FFB800; display:grid; place-items:center;
+  font-family:"JetBrains Mono", monospace; font-weight:800; font-size:14px; border:1.5px solid #111;
+}
+.brand-txt small{display:block; font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:.12em; color:var(--muted)}
+.brand-txt strong{font-size:15px}
+.navlinks{display:flex; gap:22px; font-family:"JetBrains Mono", monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase}
+.navlinks a{padding:6px 0; border-bottom:2px solid transparent}
+.navlinks a:hover{border-color:var(--accent)}
+.nav-cta{
+  display:flex; gap:10px; align-items:center;
+}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:10px 16px; border:1.5px solid #111; background:#111; color:#fff;
+  font-family:"JetBrains Mono", monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+  font-weight:700; cursor:pointer; transition:.15s;
+}
+.btn:hover{transform:translate(-1px,-1px); box-shadow:3px 3px 0 #111}
+.btn-ghost{background:#fff; color:#111}
+.btn-ghost:hover{background:#FFFBF5}
+.hamburger{display:none; width:42px; height:42px; border:1.5px solid #111; background:#fff; display:none; place-items:center}
+/* HERO */
+.hero{
+  display:grid; grid-template-columns:1.15fr .85fr; min-height:620px; border-bottom:1.5px solid #111;
+}
+.hero-left{
+  padding:36px 28px 28px; border-right:1.5px solid #111; position:relative; overflow:hidden;
+}
+.hero-left::before{
+  content:""; position:absolute; inset:0;
+  background-image:
+    linear-gradient(#EDE8DE 1px, transparent 1px),
+    linear-gradient(90deg, #EDE8DE 1px, transparent 1px);
+  background-size:28px 28px; opacity:.5; pointer-events:none;
+}
+.ledger-tag{
+  position:relative; display:inline-flex; align-items:center; gap:8px;
+  font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  background:#111; color:#fff; padding:6px 10px; border:1.5px solid #111;
+}
+.ledger-tag i{width:7px; height:7px; background:#FFB800; display:inline-block; animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1} 50%{opacity:.3}}
+.h1{
+  position:relative; font-family:"Fraunces", serif; font-weight:800; line-height:.88; letter-spacing:-.04em;
+  font-size:clamp(44px, 7vw, 84px); margin:18px 0 14px;
+}
+.h1 em{font-style:italic; font-weight:800; color:var(--accent)}
+.h1 .outline{color:transparent; -webkit-text-stroke:1.4px #111}
+.hero-sub{
+  position:relative; max-width:520px; font-size:15px; line-height:1.6; color:#2A2A2E;
+}
+.hero-sub strong{font-weight:700; color:#111}
+.meta-row{
+  position:relative; display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 22px;
+}
+.pill{
+  font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+  padding:7px 10px; border:1.5px solid #111; background:#fff; display:inline-flex; align-items:center; gap:6px;
+}
+.pill b{font-weight:800}
+.pill.dot::before{content:"●"; color:var(--accent); font-size:10px}
+.hero-actions{position:relative; display:flex; flex-wrap:wrap; gap:10px}
+.stats-strip{
+  position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:22px;
+  border:1.5px solid #111; background:#fff;
+}
+.stat{padding:14px 12px; border-right:1.5px solid #111; text-align:center}
+.stat:last-child{border-right:0}
+.stat strong{display:block; font-family:"Fraunces", serif; font-size:22px; line-height:1; letter-spacing:-.03em}
+.stat span{font-family:"JetBrains Mono", monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+/* hero right — ID card */
+.hero-right{
+  padding:18px; background:#fff; position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.id-card{
+  width:min(420px, 100%); background:#fff; border:1.5px solid #111; position:relative;
+  box-shadow:8px 8px 0 #111;
+}
+.id-top{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 12px; background:#111; color:#fff; font-family:"JetBrains Mono", monospace;
+  font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+}
+.photo-wrap{
+  position:relative; aspect-ratio:3/3.4; overflow:hidden; background:#EDE8DE; border-top:1.5px solid #111; border-bottom:1.5px solid #111;
+}
+.photo-wrap img{width:100%; height:100%; object-fit:cover; object-position:top center; filter:contrast(1.02) saturate(1.02)}
+.photo-wrap::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(to bottom, transparent 60%, rgba(0,0,0,.18));
+  pointer-events:none;
+}
+.pin{
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  width:72px; height:14px; background:#C9C5BC; border:1.5px solid #111; border-radius:999px;
+  box-shadow:0 2px 0 rgba(0,0,0,.2);
+}
+.pin::before{content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:10px; height:10px; background:#fff; border:1.5px solid #111; border-radius:50%}
+.id-info{padding:14px 14px 16px; display:grid; gap:8px}
+.id-name{font-family:"Fraunces", serif; font-weight:800; font-size:22px; letter-spacing:-.03em; line-height:1}
+.id-role{font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#6B6B74}
+.id-meta{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px}
+.kv{border:1.5px solid #111; padding:8px 9px; background:#FFFBF5}
+.kv small{display:block; font-family:"JetBrains Mono", monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#6B6B74}
+.kv strong{font-size:12px}
+/* ticker */
+.ticker{
+  border-top:1.5px solid #111; border-bottom:1.5px solid #111; background:#111; color:#FFB800;
+  overflow:hidden; white-space:nowrap; padding:10px 0;
+  font-family:"JetBrains Mono", monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+}
+.ticker-track{display:inline-flex; gap:28px; animation:mar 22s linear infinite}
+@keyframes mar{0%{transform:translateX(0)} 100%{transform:translateX(-50%)}}
+
+/* sections */
+.section{padding:32px 20px; border-bottom:1.5px solid #111}
+.section-head{display:flex; align-items:end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px}
+.eyebrow{font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:800}
+.h2{
+  font-family:"Fraunces", serif; font-weight:800; letter-spacing:-.04em; line-height:.95;
+  font-size:clamp(30px, 5vw, 48px); margin:6px 0 0;
+}
+.h2 em{font-style:italic; color:var(--accent)}
+.lead{max-width:560px; color:#3A3A40; line-height:1.6; font-size:14px}
+.filters{display:flex; gap:8px; flex-wrap:wrap}
+.filter{
+  padding:8px 12px; border:1.5px solid #111; background:#fff; font-family:"JetBrains Mono", monospace;
+  font-size:11px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; font-weight:700;
+}
+.filter.active{background:#111; color:#fff}
+
+/* cards */
+.grid{
+  display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;
+}
+.card{
+  background:#fff; border:1.5px solid #111; display:flex; flex-direction:column; position:relative; overflow:hidden;
+}
+.card:hover{transform:translate(-1px,-1px); box-shadow:4px 4px 0 #111}
+.card-top{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 12px; border-bottom:1.5px solid #111; background:#FFFBF5;
+  font-family:"JetBrains Mono", monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+}
+.spec{font-weight:800}
+.lang{
+  padding:4px 7px; border:1px solid #111; background:#111; color:#fff; font-size:10px; letter-spacing:.08em;
+}
+.card-body{padding:14px 14px 12px; flex:1; display:flex; flex-direction:column; gap:10px}
+.card h3{margin:0; font-family:"Fraunces", serif; font-weight:800; font-size:18px; letter-spacing:-.03em; line-height:1.05}
+.card p{margin:0; font-size:13.5px; line-height:1.55; color:#2E2E34}
+.chips{display:flex; gap:6px; flex-wrap:wrap}
+.chip{
+  font-family:"JetBrains Mono", monospace; font-size:10px; letter-spacing:.06em; text-transform:uppercase;
+  padding:5px 7px; border:1px solid #111; background:#fff;
+}
+.card-foot{
+  display:flex; gap:8px; padding:12px; border-top:1.5px solid #111; background:#fff;
+}
+.card-foot a{
+  flex:1; text-align:center; padding:9px 10px; border:1.5px solid #111; font-family:"JetBrains Mono", monospace;
+  font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:800;
+}
+.card-foot a.primary{background:#111; color:#fff}
+.card-foot a:hover{transform:translate(-1px,-1px); box-shadow:2px 2px 0 #111}
+.badge-new{
+  position:absolute; top:10px; right:-28px; transform:rotate(35deg);
+  background:var(--accent); color:#fff; font-family:"JetBrains Mono", monospace; font-size:10px; letter-spacing:.12em;
+  padding:4px 28px; border:1px solid #111; font-weight:800;
+}
+
+/* lab / skills */
+.split{display:grid; grid-template-columns:1.1fr .9fr; gap:14px}
+.panel{background:#fff; border:1.5px solid #111; padding:18px}
+.panel h3{margin:0 0 10px; font-family:"Fraunces", serif; font-size:22px; letter-spacing:-.03em}
+.list{margin:0; padding:0; list-style:none; display:grid; gap:10px}
+.item{
+  display:flex; gap:12px; align-items:start; padding:10px; border:1.5px solid #111; background:#FFFBF5;
+}
+.item i{width:36px; height:36px; border:1.5px solid #111; background:#111; color:#FFB800; display:grid; place-items:center; font-family:"JetBrains Mono", monospace; font-weight:800; font-size:12px; flex:0 0 36px}
+.item strong{font-size:13px; display:block}
+.item span{font-size:12.5px; color:#4A4A52; line-height:1.5}
+
+/* timeline */
+.timeline{position:relative; display:grid; gap:12px}
+.tl{
+  display:grid; grid-template-columns:120px 1fr; gap:14px; align-items:start;
+  padding:14px; border:1.5px solid #111; background:#fff;
+}
+.tl time{font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#6B6B74; font-weight:800}
+.tl strong{font-size:14px; display:block; margin-bottom:4px}
+.tl p{margin:0; font-size:13px; line-height:1.6; color:#3A3A40}
+
+/* contact */
+.contact{
+  display:grid; grid-template-columns:.9fr 1.1fr; gap:14px;
+}
+.contact-card{
+  background:#111; color:#fff; border:1.5px solid #111; padding:18px; display:flex; flex-direction:column; gap:12px;
+}
+.contact-card h3{font-family:"Fraunces", serif; font-size:24px; letter-spacing:-.03em; margin:0}
+.mono{font-family:"JetBrains Mono", monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#FFB800}
+.contact-lines{display:grid; gap:10px; font-size:14px; line-height:1.6}
+.contact-lines a{color:#fff; text-decoration:underline; text-underline-offset:3px}
+.form{
+  background:#fff; border:1.5px solid #111; padding:18px; display:grid; gap:12px;
+}
+.field{display:grid; gap:6px}
+.field label{font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; font-weight:800}
+.field input, .field textarea, .field select{
+  padding:11px 12px; border:1.5px solid #111; background:#FFFBF5; font-family:"Space Grotesk", sans-serif; font-size:14px; outline:none;
+}
+.field input:focus, .field textarea:focus{border-color:var(--accent); background:#fff}
+
+/* footer */
+footer{
+  padding:18px 20px; border-top:1.5px solid #111; background:#fff;
+  display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;
+  font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#6B6B74;
+}
+
+/* responsive */
+@media (max-width: 980px){
+  .hero{grid-template-columns:1fr}
+  .hero-left{border-right:0; border-bottom:1.5px solid #111}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .split, .contact{grid-template-columns:1fr}
+}
+@media (max-width: 640px){
+  .topbar span.hide-m{display:none}
+  .navlinks{display:none}
+  .navlinks.open{display:flex; position:absolute; top:100%; left:0; right:0; background:#FFFBF5; border-bottom:1.5px solid #111; flex-direction:column; padding:12px 20px; gap:8px}
+  .hamburger{display:grid}
+  .grid{grid-template-columns:1fr}
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}
+  .stat:nth-child(1), .stat:nth-child(2){border-bottom:1.5px solid #111}
+  .tl{grid-template-columns:1fr}
+  .section{padding:24px 16px}
+  .hero-left{padding:22px 16px}
+  .nav{padding:12px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="hazard" aria-hidden="true"></div>
+<div class="topbar">
+  <div><b>SYSTEM —</b> Leading University, Sylhet &nbsp; <span class="hide-m">· Lab Assistant Portfolio · 2020—2025</span></div>
+  <div style="display:flex; gap:14px; align-items:center">
+    <span>open-source hardware</span>
+    <span style="background:#111; color:#FFB800; padding:3px 7px; border:1px solid #111">8 REPOS</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <a class="brand" href="#">
+    <span class="mark">OC</span>
+    <span class="brand-txt">
+      <strong>ORPON CHANDA</strong>
+      <small>Lab Assistant — LU, Sylhet</small>
+    </span>
+  </a>
+  <div class="navlinks" id="navlinks">
+    <a href="#work">Work — 08</a>
+    <a href="#lab">Lab & Skills</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-ghost" href="https://github.com/Orpon-chanda" target="_blank" rel="noreferrer">GitHub →</a>
+    <a class="btn" href="#contact">Hire / Contact</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">≡</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="ledger-tag"><i></i> Lab Ledger — ID # LU-934906 · Active</div>
+    <h1 class="h1">ROBOTICS<br><em>IS CRAFT.</em><br><span class="outline">ELECTRONICS</span> IS LITERACY.</h1>
+    <p class="hero-sub">
+      I’m <strong>Orpon Chanda</strong>, Lab Assistant at <strong>Leading University, Sylhet</strong>. I help students turn schematics into moving machines — PID line followers, Bluetooth cars, AC dimmers, Taka counters, RFID rigs. Eight repos, zero fluff, all built and tested in the lab.
+    </p>
+    <div class="meta-row">
+      <span class="pill dot"><b>Sylhet</b> · Leading University</span>
+      <span class="pill"><b>Focus:</b> Embedded · LFR · Arduino</span>
+      <span class="pill"><b>Email</b> 934906Rj</span>
+      <span class="pill" style="background:#FFB800"><b>Available</b> for lab collabs</span>
+    </div>
+    <div class="hero-actions">
+      <a class="btn" href="#work">View 8 Projects — ↓</a>
+      <a class="btn btn-ghost" href="https://github.com/Orpon-chanda/PID_LFR_LU" target="_blank">Latest: PID_LFR_LU (2025)</a>
+    </div>
+
+    <div class="stats-strip">
+      <div class="stat"><strong>08</strong><span>Repos documented</span></div>
+      <div class="stat"><strong>05yr</strong><span>2020 — 2025</span></div>
+      <div class="stat"><strong>PID</strong><span>Line follower core</span></div>
+      <div class="stat"><strong>100%</strong><span>Hardware tested</span></div>
+    </div>
+  </div>
+
+  <div class="hero-right bg-grid">
+    <div class="id-card">
+      <div class="pin" aria-hidden="true"></div>
+      <div class="id-top">
+        <span>Leading University · Sylhet</span>
+        <span style="background:#FFB800; color:#111; padding:2px 6px; border:1px solid #111">LAB ID</span>
+      </div>
+      <div class="photo-wrap">
+        <img src="photo.jpg" alt="Orpon Chanda — Lab Assistant, Leading University, Sylhet"/>
+      </div>
+      <div class="id-info">
+        <div class="id-name">ORPON CHANDA</div>
+        <div class="id-role">Lab Assistant · Dept. of EEE / CSE Lab</div>
+        <div class="id-meta">
+          <div class="kv"><small>Location</small><strong>Sylhet, BD</strong></div>
+          <div class="kv"><small>Email</small><strong>934906Rj</strong></div>
+          <div class="kv"><small>GitHub</small><strong>Orpon-chanda</strong></div>
+          <div class="kv"><small>Status</small><strong style="color:#16A34A">● Active</strong></div>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:6px">
+          <a href="https://github.com/Orpon-chanda" target="_blank" class="btn" style="flex:1">GitHub Profile</a>
+          <a href="#contact" class="btn btn-ghost" style="flex:1">Contact</a>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.08em; color:#6B6B74; text-align:center; margin-top:6px">SIGNED — O. CHANDA · LU LAB 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>PID Control • 8-Sensor Arrays • HC-05 Bluetooth • Zero-Cross TRIAC • TCS3200 Color • RC522 RFID • HC-SR04 Sonar • L298N • Arduino Nano/Mega • PlatformIO •</span>
+    <span>PID Control • 8-Sensor Arrays • HC-05 Bluetooth • Zero-Cross TRIAC • TCS3200 Color • RC522 RFID • HC-SR04 Sonar • L298N • Arduino Nano/Mega • PlatformIO •</span>
+  </div>
+</div>
+
+<section class="section" id="work">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">Selected work — 08 repos · fully documented</div>
+      <h2 class="h2">Every repo <em>now reads</em> like a spec sheet.</h2>
+      <p class="lead">All projects below had minimal docs — now each has wiring, logic, tuning, and usage. Tap any card for code. Originals kept intact; READMEs added.</p>
+    </div>
+    <div class="filters" id="filters">
+      <button class="filter active" data-f="all">All 08</button>
+      <button class="filter" data-f="lfr">LFR / PID</button>
+      <button class="filter" data-f="arduino">Arduino</button>
+      <button class="filter" data-f="sensors">Sensors</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <article class="card" data-tags="lfr arduino sensors">
+      <div class="badge-new">NEW 2025</div>
+      <div class="card-top"><span class="spec">SPEC-07 · PID_LFR_LU</span><span class="lang">C · PlatformIO</span></div>
+      <div class="card-body">
+        <h3>PID Line Follower — Leading University</h3>
+        <p>Flagship. 8 sensors, T-section + 90° logic, endpoint stop. Modular headers, tuned PID (Kp/Ki/Kd). Built for inter-university competition.</p>
+        <div class="chips"><span class="chip">8× IR</span><span class="chip">PID</span><span class="chip">Nano</span><span class="chip">T-junction</span></div>
+      </div>
+      <div class="card-foot"><a class="primary" href="https://github.com/Orpon-chanda/PID_LFR_LU" target="_blank">Open repo →</a><a href="https://github.com/Orpon-chanda/PID_LFR_LU/blob/main/src/main.cpp" target="_blank">src/main.cpp</a></div>
+    </article>
+
+    <article class="card" data-tags="arduino sensors">
+      <div class="card-top"><span class="spec">SPEC-08 · Currency Counter</span><span class="lang">C++ · Arduino</span></div>
+      <div class="card-body">
+        <h3>Arduino Taka Counter — IR + TCS3200</h3>
+        <p>Feeds notes past an IR gate, reads RGB frequency (red 30–50 → 10 Tk, blue 70–100 → 100 Tk). 16×2 LCD shows balance from 1000 Tk.</p>
+        <div class="chips"><span class="chip">TCS3200</span><span class="chip">IR gate</span><span class="chip">LCD I2C</span></div>
+      </div>
+      <div class="card-foot"><a class="primary" href="https://github.com/Orpon-chanda/Arduino_Currency_Counter_using_IR_and_Color_Sensor" target="_blank">Open repo →</a><a href="#">Wiring</a></div>
+    </article>
+
+    <article class="card" data-tags="lfr arduino sensors">
+      <div class="card-top"><span class="spec">SPEC-05 · MindSpare1</span><span class="lang">C++ · Mega</span></div>
+      <div class="card-body">
+        <h3>MindSpare-1 LFR — Sonar + Color</h3>
+        <p>6 IR + 3 ultrasonics + TCS3200, I2C LCD, EEPROM calibration. Full competition stack with wall-follow and 30°/90° turn states.</p>
+        <div class="chips"><span class="chip">NewPing</span><span class="chip">TCS3200</span><span class="chip">EEPROM</span></div>
+      </div>
+      <div class="card-foot"><a class="primary" href="https://github.com/Orpon-chanda/MindSpare1" target="_blank">Open repo →</a><a href="#">Docs</a></div>
+    </article>
+
+    <article class="card" data-tags="arduino">
+      <div class="card-top"><span class="spec">SPEC-06 · PWM / AC Dimmer</span><span class="lang">C++ · Arduino</span></div>
+      <div class="card-body">
+        <h3>AC Dimmer — Zero-Cross TRIAC</h3>
+        <p>Phase-angle control: pot on A0 (1–8500 µs delay) → TRIAC pulse on D10 via ZVC interrupt on D2. Classic power-electronics lab demo.</p>
+        <div class="chips"><span class="chip">TRIAC BT136</span><span class="chip">ZVC</span><span class="chip">Interrupt</span></div>
+      </div>
+      <div class="card-foot"><a class="primary" href="https://github.com/Orpon-chanda/PWM" target="_blank">Open repo →</a><a href="#">Safety notes</a></div>
+    </article>
+
+    <article class="card" data-tags="arduino">
+      <div class="card-top"><span class="spec">SPEC-01 · Bluthoot_Car</span><span class="lang">C++ · Arduino</span></div>
+      <div class="card-body">
+        <h3>Bluetooth Car — HC-05</h3>
+        <p>Four-motor car via single-char Serial: F/B/L/R/S. 40-line sketch, lab starter build. Add SoftwareSerial + PWM for speed control.</p>
+        <div class="chips"><span class="chip">HC-05</span><span class="chip">L298N</span><span class="chip">Serial 9600</span></div>
+      </div>
+      <div class="card-foot"><a class="primary" href="https://github.com/Orpon-chanda/Bluthoot_Car" target="_blank">Open repo →</a><a href="#">Wiring</a></div>
+    </article>
+
+    <article class="card" data-tags="lfr arduino sensors">
+      <div class="card-top"><span class="spec">SPEC-02 · LFR VAI Code</span><span class="lang">C++ · Mega</span></div>
+      <div class="card-body">
+        <h3>LFR VAI — Full Bundle (legacy 2020)</h3>
+        <p>Oldest repo in profile. Complete LFR with grabber: line_follow() + sonar grab (<6 cm) + indicator LEDs + calibration. Roots of MindSpare1.</p>
+        <div class="chips"><span class="chip">Line follow</span><span class="chip">Sonar</span><span class="chip">Grabber</span></div>
+      </div>
+      <div class="card-foot"><a class="primary" href="https://github.com/Orpon-chanda/github" target="_blank">Open repo →</a><a href="#">History</a></div>
+    </article>
+
+    <article class="card" data-tags="arduino sensors">
+      <div class="card-top"><span class="spec">SPEC-04 · RFID_4</span><span class="lang">C++ · RC522</span></div>
+      <div class="card-body">
+        <h3>RFID_4 — “Coffee Code”</h3>
+        <p>Minimal RFID access demo with RC522. Tap authorized UID → relay/buzzer fires. Enrollment via master card → EEPROM (roadmap).</p>
+        <div class="chips"><span class="chip">RC522</span><span class="chip">SPI</span><span class="chip">Relay</span></div>
+      </div>
+      <div class="card-foot"><a class="primary" href="https://github.com/Orpon-chanda/RFID_4" target="_blank">Open repo →</a><a href="#">Use</a></div>
+    </article>
+
+    <article class="card" data-tags="arduino">
+      <div class="card-top"><span class="spec">SPEC-03 · Profile</span><span class="lang">Config</span></div>
+      <div class="card-body">
+        <h3>Orpon-chanda — Profile README</h3>
+        <p>Special repo that renders on your GitHub profile. Was empty — now ships with hero, featured projects, and contact block.</p>
+        <div class="chips"><span class="chip">github-config</span><span class="chip">Profile</span></div>
+      </div>
+      <div class="card-foot"><a class="primary" href="https://github.com/Orpon-chanda/Orpon-chanda" target="_blank">Open repo →</a><a href="#">README</a></div>
+    </article>
+
+  </div>
+</section>
+
+<section class="section bg-grid" id="lab">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">Lab & Capabilities</div>
+      <h2 class="h2">What I do <em>in the lab</em> — every day.</h2>
+    </div>
+    <p class="lead">Not a portfolio for show — it’s what I teach, fix, and field with students at LU, Sylhet.</p>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <h3>Hardware I work with</h3>
+      <ul class="list">
+        <li class="item"><i>01</i><div><strong>Arduino Nano / Mega, ATmega328P</strong><span>PlatformIO, bare AVR, interrupts, timers, PWM, EEPROM.</span></div></li>
+        <li class="item"><i>02</i><div><strong>IR arrays, TCS3200, HC-SR04, RC522</strong><span>Line sensing, color, distance, RFID — calibration and threshold tuning.</span></div></li>
+        <li class="item"><i>03</i><div><strong>L298N / TB6612, TRIAC + ZVC</strong><span>Motor drivers, phase-angle AC control, isolation and safety.</span></div></li>
+        <li class="item"><i>04</i><div><strong>LCD I2C, HC-05 Bluetooth</strong><span>UI, telemetry, wireless control and debugging.</span></div></li>
+      </ul>
+    </div>
+    <div class="panel" style="background:#111; color:#fff; border-color:#111">
+      <h3 style="color:#FFB800">Lab method — build, test, log</h3>
+      <ul class="list">
+        <li class="item" style="background:#1A1A1E; border-color:#2A2A2E; color:#E8E0D6"><i style="background:#FFB800; color:#111">✓</i><div><strong>Spec-first builds</strong><span style="color:#9A9AA0">Every repo now has spec, wiring table, and tunable parameters — so juniors can replicate.</span></div></li>
+        <li class="item" style="background:#1A1A1E; border-color:#2A2A2E; color:#E8E0D6"><i style="background:#FFB800; color:#111">✓</i><div><strong>Competition-ready</strong><span style="color:#9A9AA0">PID_LFR_LU and MindSpare1 logged T-junction, 90° and end-stop behavior on real tracks.</span></div></li>
+        <li class="item" style="background:#1A1A1E; border-color:#2A2A2E; color:#E8E0D6"><i style="background:#FFB800; color:#111">✓</i><div><strong>Safe mains work</strong><span style="color:#9A9AA0">AC dimmer includes isolation, fuse, snubber checklist — lab safety before demo.</span></div></li>
+      </ul>
+      <div style="margin-top:14px; display:flex; gap:8px">
+        <span class="pill" style="background:#FFB800; color:#111; border-color:#111"><b>Location</b> Sylhet</span>
+        <span class="pill" style="background:#fff; color:#111"><b>Dept</b> EEE / CSE Lab</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">About</div>
+      <h2 class="h2">Lab Assistant who <em>ships hardware.</em></h2>
+    </div>
+    <p class="lead">I support the electronics and robotics labs at <strong>Leading University, Sylhet</strong> — prepping rigs, guiding final-year builds, and keeping the soldering stations honest.</p>
+  </div>
+  <div class="timeline">
+    <div class="tl">
+      <time>2025 — Present</time>
+      <div>
+        <strong>Lab Assistant, Leading University, Sylhet</strong>
+        <p>Day-to-day lab operations, student mentoring, competition LFR tuning (PID_LFR_LU now the lab reference), inventory and safety.</p>
+      </div>
+    </div>
+    <div class="tl">
+      <time>2020 — 2021</time>
+      <div>
+        <strong>Early robotics builds — 7 repos</strong>
+        <p>Bluetooth cars, LFR VAI/MindSpare, AC dimmer, Taka counter, RFID demos — all documented retroactively in this pass. Foundation for today’s PID work.</p>
+      </div>
+    </div>
+    <div class="tl">
+      <time>Teaching</time>
+      <div>
+        <strong>What students take away</strong>
+        <p>How to calibrate sensors, tune PID without guessing, wire safely, and write READMEs someone else can actually follow — the ledger mindset.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-grid" id="contact">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">Contact</div>
+      <h2 class="h2">If you’re in Sylhet — <em>come to the lab.</em></h2>
+    </div>
+    <p class="lead">For students, collaborators, or anyone who wants a Taka counter that actually counts. Email is fastest; lab visits by appointment.</p>
+  </div>
+  <div class="contact">
+    <div class="contact-card">
+      <div class="mono">Leading University · Sylhet — Lab</div>
+      <h3>Let’s build something that moves.</h3>
+      <div class="contact-lines">
+        <div><span style="color:#9A9AA0">Name</span><br><strong style="font-size:16px">Orpon Chanda</strong> — Lab Assistant</div>
+        <div><span style="color:#9A9AA0">Email</span><br><a href="mailto:934906Rj">934906Rj</a> <span style="font-size:12px; color:#9A9AA0">(confirm full address — shown as on file)</span></div>
+        <div><span style="color:#9A9AA0">GitHub</span><br><a href="https://github.com/Orpon-chanda" target="_blank">github.com/Orpon-chanda</a> · 8 repos</div>
+        <div><span style="color:#9A9AA0">Location</span><br>Sylhet, Bangladesh · Leading University</div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:4px">
+        <a class="btn" style="background:#FFB800; color:#111; border-color:#111" href="mailto:934906Rj">Email Orpon →</a>
+        <a class="btn" style="background:#fff; color:#111" href="https://github.com/Orpon-chanda" target="_blank">GitHub</a>
+      </div>
+      <div style="font-family:'JetBrains Mono', monospace; font-size:10px; color:#9A9AA0; letter-spacing:.08em; margin-top:8px">RESPONSE TIME — Usually within lab hours (Sat–Thu, 9am–5pm BST)</div>
+    </div>
+    <form class="form" onsubmit="event.preventDefault(); toast()">
+      <div style="display:flex; justify-content:space-between; align-items:center">
+        <div class="mono" style="color:#111">Send a message</div>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.08em; background:#111; color:#FFB800; padding:4px 7px">FRONTEND ONLY — WIRES TO EMAIL</span>
+      </div>
+      <div class="field"><label>Your name</label><input placeholder="Jane Doe" required/></div>
+      <div class="field"><label>Email</label><input type="email" placeholder="you@university.edu" required/></div>
+      <div class="field"><label>What’s it about?</label><select><option>Lab visit / collaboration</option><option>Help with LFR / PID</option><option>Project guidance</option><option>Other</option></select></div>
+      <div class="field"><label>Message</label><textarea rows="4" placeholder="Hi Orpon, I’m working on a line follower and…"></textarea></div>
+      <button class="btn" type="submit" style="width:100%">Send message →</button>
+      <div id="toast" style="display:none; padding:10px; border:1.5px solid #111; background:#FFFBF5; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.06em"></div>
+      <div style="font-size:11px; color:#6B6B74; line-height:1.5">This form is static (GitHub Pages has no backend). Submitting will prepare a <code>mailto:</code> draft. For a real inbox, wire to Formspree / Google Forms later.</div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div>© 2025 Orpon Chanda · Leading University, Sylhet · Built as a lab ledger — not a template.</div>
+  <div style="display:flex; gap:12px">
+    <a href="https://github.com/Orpon-chanda" target="_blank">GitHub</a>
+    <span>·</span>
+    <a href="#work">8 repos documented</a>
+    <span>·</span>
+    <span>photo: orponchanda.jpeg</span>
+  </div>
+</footer>
+
+<script>
+const ham=document.getElementById('hamburger'), nav=document.getElementById('navlinks');
+ham.addEventListener('click',()=>nav.classList.toggle('open'));
+document.querySelectorAll('.navlinks a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+
+// filter
+const filters=document.querySelectorAll('.filter'), cards=document.querySelectorAll('.card');
+filters.forEach(b=>{
+  b.addEventListener('click',()=>{
+    filters.forEach(x=>x.classList.remove('active')); b.classList.add('active');
+    const f=b.dataset.f;
+    cards.forEach(c=>{
+      const show=f==='all' || c.dataset.tags.includes(f);
+      c.style.display=show?'':'none';
+    });
+  });
+});
+function toast(){
+  const t=document.getElementById('toast');
+  t.style.display='block';
+  t.textContent='✓ Ready — this static demo prepares a mailto: draft. Hook Formspree to make it send.';
+  t.style.background='#111'; t.style.color='#FFB800'; t.style.borderColor='#111';
+  setTimeout(()=>{ window.location.href='mailto:934906Rj?subject=Portfolio%20contact%20from%20website'; }, 600);
+}
+</script>
+</body>
+</html>
