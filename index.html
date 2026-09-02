@@ -362,6 +362,9 @@ html[data-theme="dark"] .theme-toggle{ background:#1C1C1F; border-color:#2A2A2E;
 }
 .theme-toggle:hover{ transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,0.10)}
 
+/* remove yellow/black hazard entirely - minimal */
+.hazard{ display:none !important; }
+
 /* responsive */
 @media (max-width: 980px){
   .hero{grid-template-columns:1fr}
@@ -382,16 +385,24 @@ html[data-theme="dark"] .theme-toggle{ background:#1C1C1F; border-color:#2A2A2E;
   .hero-left{padding:22px 16px}
   .nav{padding:12px 16px}
 }
-/* mobile hero — hide dense text, make photo the hero focus */
+/* mobile hero — hide dense text, photo focus, opaque boundaries, no header */
 @media (max-width: 640px){
+  .nav, .hazard{ display:none !important; }
   .hero{
     display:flex; flex-direction:column;
+    background: var(--paper);
   }
+  .hero-left, .hero-right, .section, .panel, .card, .tl, .contact-card, .form, footer{
+    background: var(--paper) !important;
+    background-color: var(--paper) !important;
+  }
+  .card, .panel, .tl, .form{ background: var(--card) !important; }
   .hero-right{
     order:-1;
-    padding:28px 16px 20px;
-    min-height: 52vh;
+    padding:24px 16px 16px;
+    min-height: 48vh;
     justify-content:center;
+    background: var(--paper) !important;
   }
   .hero-right .id-card{
     width:min(360px, 92vw);
@@ -405,16 +416,20 @@ html[data-theme="dark"] .theme-toggle{ background:#1C1C1F; border-color:#2A2A2E;
     display:none !important;
   }
   .hero-left{
-    padding:18px 16px 22px;
+    padding:16px 16px 20px;
     text-align:center;
     border-bottom:0;
+    background: var(--paper) !important;
   }
   .hero-left .h1{
     font-size: clamp(28px, 8vw, 36px);
     margin: 0 auto;
     max-width: 22ch;
     line-height:0.95;
+    text-align:center;
   }
+  /* keep animation visible in gaps, but cards opaque */
+  #bgCanvas{ opacity:.35 !important; }
 }
 @media (prefers-color-scheme: dark) and (max-width: 980px){
   .hero-left{border-color:#2A2A2E}
@@ -479,7 +494,6 @@ html[data-theme="dark"] .theme-toggle{ background:#1C1C1F; border-color:#2A2A2E;
       <div class="pin" aria-hidden="true"></div>
       <div class="id-top">
         <span>Leading University · Sylhet</span>
-        <span style="background:#FFB800; color:#111; padding:2px 6px; border:1px solid #111">LAB ID</span>
       </div>
       <div class="photo-wrap">
         <img src="photo.jpg" alt="Orpon Chanda — Lab Assistant, Leading University, Sylhet"/>
@@ -509,7 +523,7 @@ html[data-theme="dark"] .theme-toggle{ background:#1C1C1F; border-color:#2A2A2E;
     <div>
       <div class="eyebrow">Selected work — 08 repos · fully documented</div>
       <h2 class="h2">Every repo <em>now reads</em> like a spec sheet.</h2>
-      <p class="lead">All projects below had minimal docs — now each has wiring, logic, tuning, and usage. Tap any card for code. Originals kept intact; READMEs added.</p>
+      <p class="lead">Browse the 8 hardware builds — tap any card for code, wiring and demo.</p>
     </div>
     <div class="filters" id="filters">
       <button class="filter active" data-f="all">All 08</button>
@@ -698,7 +712,6 @@ html[data-theme="dark"] .theme-toggle{ background:#1C1C1F; border-color:#2A2A2E;
     <form class="form" onsubmit="event.preventDefault(); toast()">
       <div style="display:flex; justify-content:space-between; align-items:center">
         <div class="mono" style="color:#111">Send a message</div>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.08em; background:#111; color:#FFB800; padding:4px 7px">FRONTEND ONLY — WIRES TO EMAIL</span>
       </div>
       <div class="field"><label>Your name</label><input placeholder="Jane Doe" required/></div>
       <div class="field"><label>Email</label><input type="email" placeholder="you@university.edu" required/></div>
@@ -706,7 +719,6 @@ html[data-theme="dark"] .theme-toggle{ background:#1C1C1F; border-color:#2A2A2E;
       <div class="field"><label>Message</label><textarea rows="4" placeholder="Hi Orpon, I’m working on a line follower and…"></textarea></div>
       <button class="btn" type="submit" style="width:100%">Send message →</button>
       <div id="toast" style="display:none; padding:10px; border:1px solid var(--line2); background:#FFFBF5; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.06em"></div>
-      <div style="font-size:11px; color:#6B6B74; line-height:1.5">This form is static (GitHub Pages has no backend). Submitting will prepare a <code>mailto:</code> draft. For a real inbox, wire to Formspree / Google Forms later.</div>
     </form>
   </div>
 </section>
