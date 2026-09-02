@@ -39,7 +39,7 @@ body{
   position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none;
   background: var(--paper);
 }
-#bgCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; opacity:.78}
+#bgCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; opacity:1}
 @media (prefers-reduced-motion: reduce){
   #bgCanvas{ opacity:.18 }
 }
@@ -792,7 +792,10 @@ filters.forEach(b=>{
   const CYCLE = 22000; // 22s slow loop
   function resize(){
     dpr = Math.min(window.devicePixelRatio||1, 2);
-    w = canvas.offsetWidth; h = canvas.offsetHeight;
+    w = canvas.offsetWidth || window.innerWidth;
+    h = canvas.offsetHeight || window.innerHeight;
+    if(w<50) w = window.innerWidth;
+    if(h<50) h = window.innerHeight;
     canvas.width = w*dpr; canvas.height = h*dpr;
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
@@ -809,7 +812,7 @@ filters.forEach(b=>{
   }
   function drawPCB(x,y,s, p){
     const a = ease(p);
-    stroke(isDark()?'#FFFFFF':'#111111', 1.1, 0.18 + a*0.55);
+    stroke(isDark()?'#FFFFFF':'#111111', 1.5, 0.38 + a*0.62);
     const rw=180*s, rh=112*s;
     // board outline with corner cut
     ctx.beginPath();
@@ -857,7 +860,7 @@ filters.forEach(b=>{
   function drawTraces(cx,cy,s, p){
     const a = p; // linear draw progress
     if(a<=0) return;
-    stroke(isDark()?'#FFFFFF':'#111111', 1.0, 0.12 + a*0.28);
+    stroke(isDark()?'#FFFFFF':'#111111', 1.4, 0.30 + a*0.45);
     const traces = [
       [[cx-60*s, cy-18*s],[cx-22*s, cy-18*s],[cx-22*s, cy-2*s]],
       [[cx+22*s, cy-2*s],[cx+22*s, cy+14*s],[cx+62*s, cy+14*s]],
@@ -893,8 +896,8 @@ filters.forEach(b=>{
       if(prog<=0) continue;
       const y = cy + 56*s;
       const x = cx + ix;
-      ctx.globalAlpha = prog*0.55;
-      stroke(isDark()?'#FFFFFF':'#111111', 1.1, ctx.globalAlpha);
+      ctx.globalAlpha = prog*0.85;
+      stroke(isDark()?'#FFFFFF':'#111111', 1.4, ctx.globalAlpha);
       ctx.beginPath(); ctx.arc(x, y, 6*s, 0, Math.PI*2); ctx.stroke();
       ctx.beginPath(); ctx.arc(x, y, 2.2*s, 0, Math.PI*2); ctx.fillStyle = isDark()?'rgba(255,255,255,0.9)':'rgba(17,17,17,0.9)'; ctx.globalAlpha = prog*0.35; ctx.fill();
       // connector line
@@ -911,8 +914,8 @@ filters.forEach(b=>{
       if(t<=0) return;
       const sc = 0.6 + 0.4*ease(t);
       ctx.save(); ctx.translate(x,y); ctx.scale(sc, sc);
-      ctx.globalAlpha = t*0.6;
-      stroke(isDark()?'#FFFFFF':'#111111', 1.2, ctx.globalAlpha);
+      ctx.globalAlpha = t*0.85;
+      stroke(isDark()?'#FFFFFF':'#111111', 1.6, ctx.globalAlpha);
       ctx.beginPath(); ctx.arc(0,0,22*s, 0, Math.PI*2); ctx.stroke();
       ctx.beginPath(); ctx.arc(0,0,14*s, 0, Math.PI*2); ctx.stroke();
       // hub lines
@@ -939,8 +942,8 @@ filters.forEach(b=>{
   function drawChassis(cx,cy,s, p){
     const a = ease(p);
     if(a<=0) return;
-    ctx.globalAlpha = a*0.32;
-    stroke(isDark()?'#FFFFFF':'#111111', 1.1, ctx.globalAlpha);
+    ctx.globalAlpha = a*0.55;
+    stroke(isDark()?'#FFFFFF':'#111111', 1.5, ctx.globalAlpha);
     ctx.setLineDash([4*s, 5*s]);
     ctx.strokeRect(cx-92*s, cy-46*s, 184*s, 96*s);
     ctx.setLineDash([]);
@@ -976,8 +979,7 @@ filters.forEach(b=>{
     // choose center based on viewport: slightly top-center
     const cx = w*0.50, cy = h*0.46;
     const s = Math.min(w,h) < 700 ? 1.15 : 1.95;
-    // global fade in/out at loop edges for soft looping
-    const fade = t<0.04 ? t/0.04 : t>0.94 ? (1-t)/0.06 : 1;
+    const fade = 1;
     ctx.globalAlpha = fade;
     // draw in order
     drawPCB(cx, cy, s, phase(t, 0.00, 0.16));
@@ -1003,7 +1005,9 @@ filters.forEach(b=>{
     raf = requestAnimationFrame(frame);
   }
   resize();
-  frame(0);
+  frame(performance.now());
+  // fallback: ensure visible even if rAF delayed
+  setTimeout(()=>{ if(w<10) { resize(); }}, 100);
   window.addEventListener('resize', resize);
   // pause when tab hidden for performance
   document.addEventListener('visibilitychange', () => {
