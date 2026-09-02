@@ -32,14 +32,16 @@ body{
   -webkit-font-smoothing:antialiased;
   position:relative;
 }
-/* animated ambient background — soft drifting orbs + grid */
+/* animated background — canvas + drifting orbs (always visible, respects motion) */
 .ambient{
   position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none;
   background: var(--paper);
 }
+#bgCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; opacity:.95}
 .ambient::before, .ambient::after{
-  content:""; position:absolute; border-radius:50%; filter:blur(44px); opacity:.28;
-  animation: drift 18s ease-in-out infinite alternate;
+  content:""; position:absolute; border-radius:50%; filter:blur(44px); opacity:.34;
+  animation: drift 14s ease-in-out infinite alternate;
+  will-change: transform;
 }
 .ambient::before{
   width:720px; height:720px; left:-160px; top:-200px;
@@ -48,18 +50,20 @@ body{
 .ambient::after{
   width:840px; height:840px; right:-220px; top:18%;
   background: radial-gradient(circle at 50% 50%, #0EA5E9 0%, #7C3AED 34%, transparent 72%);
-  animation-duration:22s; animation-delay:-4s;
+  animation-duration:18s; animation-delay:-3s;
 }
 .ambient .orb3{
   position:absolute; width:600px; height:600px; left:32%; bottom:-220px;
-  border-radius:50%; filter:blur(50px); opacity:.18;
+  border-radius:50%; filter:blur(50px); opacity:.22;
   background: radial-gradient(circle, #10B981 0%, transparent 70%);
-  animation: drift2 24s ease-in-out infinite alternate;
+  animation: drift2 20s ease-in-out infinite alternate;
+  will-change: transform;
 }
-@keyframes drift{0%{transform:translate(0,0) scale(1)} 100%{transform:translate(28px,22px) scale(1.06)}}
-@keyframes drift2{0%{transform:translate(0,0)} 100%{transform:translate(-22px,-18px)}}
+@keyframes drift{0%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(18px,14px,0) scale(1.04)} 100%{transform:translate3d(30px,22px,0) scale(1.08)}}
+@keyframes drift2{0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-24px,-20px,0) scale(1.05)}}
 @media (prefers-reduced-motion: reduce){
   .ambient::before, .ambient::after, .ambient .orb3{animation:none}
+  #bgCanvas{ display:none }
 }
 a{color:inherit; text-decoration:none}
 img{max-width:100%; display:block}
@@ -139,8 +143,11 @@ img{max-width:100%; display:block}
 }
 .pill b{font-weight:800}
 .pill.dot::before{content:"●"; color:var(--accent); font-size:10px}
-.pill.orcid{background:#111; color:#fff}
-.pill.orcid a{color:#FFB800; text-decoration:underline; text-underline-offset:2px}
+  .pill.orcid{background:#111; color:#fff; border-color:#111}
+  .pill.orcid a{color:#FFB800; text-decoration:underline; text-underline-offset:2px}
+  .kv.orcid{ background:#111; color:#fff; border-color:#111}
+  .kv.orcid small{ color:#FFB800}
+  .kv.orcid strong a{ color:#FFB800}
 .hero-actions{position:relative; display:flex; flex-wrap:wrap; gap:10px}
 .stats-strip{
   position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:22px;
@@ -290,9 +297,8 @@ footer{
   font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#6B6B74;
 }
 
-/* DARK MODE — auto via prefers-color-scheme */
-@media (prefers-color-scheme: dark){
-  :root{
+/* DARK MODE — manual toggle + auto */
+html[data-theme="dark"]{
     --paper:#0F0F10;
     --ink:#F2F0EB;
     --ink2:#E8E6E1;
@@ -303,57 +309,86 @@ footer{
     --card:#17171A;
     --panel:#17171A;
     --soft:#1C1C1F;
-  }
-  body{ background:var(--paper); color:var(--ink)}
-  .nav{ background:rgba(15,15,16,.88); border-color:#2A2A2E}
-  .navlinks a:hover{border-color:#FF3B1F}
-  .brand-txt small, .id-role{color:#9A9AA0}
-  .mark{ background:#FFB800; color:#111; border-color:#FFB800}
-  .hazard{ border-color:#2A2A2E}
-  .btn{ border-color:#2A2A2E}
-  .btn-ghost{ background:#1C1C1F; color:#F2F0EB; border-color:#2A2A2E}
-  .hero{ border-color:#2A2A2E}
-  .hero-left{ border-color:#2A2A2E}
-  .hero-left::before{ opacity:.14}
-  .hero-sub, .hero-sub strong{ color:#E8E6E1}
-  .pill{ background:#17171A; border-color:#2A2A2E; color:#E8E6E1}
-  .pill.orcid{ background:#F2F0EB; color:#111}
-  .stats-strip{ background:#17171A; border-color:#2A2A2E}
-  .stat{ border-color:#2A2A2E}
-  .hero-right{ background:rgba(23,23,26,.6)}
-  .id-card{ background:#17171A; border-color:#2A2A2E; box-shadow:8px 8px 0 #000}
-  .id-top{ background:#000; border-bottom:1px solid #2A2A2E}
-  .photo-wrap{ background:#1C1C1F; border-color:#2A2A2E}
-  .pin{ background:#2A2A2E; border-color:#3A3A3E}
-  .kv{ background:#1C1C1F; border-color:#2A2A2E}
-  .kv strong a{color:#F2F0EB}
-  .section{ border-color:#2A2A2E}
-  .lead{ color:#C9C9CE}
-  .filter{ background:#17171A; border-color:#2A2A2E; color:#F2F0EB}
-  .filter.active{ background:#F2F0EB; color:#111}
-  .card{ background:#17171A; border-color:#2A2A2E}
-  .card-top{ background:#1C1C1F; border-color:#2A2A2E}
-  .card p{ color:#C9C9CE}
-  .chip{ background:#1C1C1F; border-color:#2A2A2E; color:#E8E6E1}
-  .card-foot{ background:#17171A; border-color:#2A2A2E}
-  .card-foot a{ border-color:#2A2A2E}
-  .card-foot a.primary{ background:#F2F0EB; color:#111; border-color:#F2F0EB}
-  .panel{ background:#17171A; border-color:#2A2A2E}
-  .item{ background:#1C1C1F; border-color:#2A2A2E}
-  .item span{ color:#C9C9CE}
-  .tl{ background:#17171A; border-color:#2A2A2E}
-  .tl p{ color:#C9C9CE}
-  .form{ background:#17171A; border-color:#2A2A2E}
-  .field input, .field textarea, .field select{ background:#1C1C1F; border-color:#2A2A2E; color:#F2F0EB}
-  .contact-card{ background:#000; border-color:#2A2A2E}
-  footer{ background:#0F0F10; border-color:#2A2A2E; color:#9A9AA0}
-  .eyebrow{ color:#FF6B4A}
-  .h1 .outline{ -webkit-text-stroke-color:#3A3A3E}
-  .ambient{ background: var(--paper)}
-  .ambient::before{ opacity:.18}
-  .ambient::after{ opacity:.16}
-  .ambient .orb3{ opacity:.10}
 }
+html[data-theme="dark"] body{ background:var(--paper); color:var(--ink)}
+html[data-theme="dark"] .nav{ background:rgba(15,15,16,.92); border-color:#2A2A2E}
+html[data-theme="dark"] .navlinks a:hover{border-color:#FF3B1F}
+html[data-theme="dark"] .brand-txt small, html[data-theme="dark"] .id-role{color:#9A9AA0}
+html[data-theme="dark"] .mark{ background:#FFB800; color:#111; border-color:#FFB800}
+html[data-theme="dark"] .hazard{ border-color:#2A2A2E}
+html[data-theme="dark"] .btn{ border-color:#2A2A2E}
+html[data-theme="dark"] .btn-ghost{ background:#1C1C1F; color:#F2F0EB; border-color:#2A2A2E}
+html[data-theme="dark"] .hero{ border-color:#2A2A2E}
+html[data-theme="dark"] .hero-left{ border-color:#2A2A2E}
+html[data-theme="dark"] .hero-left::before{ opacity:.14}
+html[data-theme="dark"] .hero-sub, html[data-theme="dark"] .hero-sub strong{ color:#E8E6E1}
+html[data-theme="dark"] .pill{ background:#17171A; border-color:#2A2A2E; color:#E8E6E1}
+html[data-theme="dark"] .pill.orcid{ background:#FFB800 !important; color:#111 !important; border-color:#FFB800 !important}
+html[data-theme="dark"] .pill.orcid a{ color:#111 !important}
+html[data-theme="dark"] .kv.orcid{ background:#FFB800 !important; border-color:#FFB800 !important; color:#111 !important}
+html[data-theme="dark"] .kv.orcid small{ color:#111 !important; opacity:.7}
+html[data-theme="dark"] .kv.orcid strong a{ color:#111 !important}
+html[data-theme="dark"] .stats-strip{ background:#17171A; border-color:#2A2A2E}
+html[data-theme="dark"] .stat{ border-color:#2A2A2E}
+html[data-theme="dark"] .hero-right{ background:rgba(23,23,26,.6)}
+html[data-theme="dark"] .id-card{ background:#17171A; border-color:#2A2A2E; box-shadow:8px 8px 0 #000}
+html[data-theme="dark"] .id-top{ background:#000; border-bottom:1px solid #2A2A2E}
+html[data-theme="dark"] .photo-wrap{ background:#1C1C1F; border-color:#2A2A2E}
+html[data-theme="dark"] .pin{ background:#2A2A2E; border-color:#3A3A3E}
+html[data-theme="dark"] .kv{ background:#1C1C1F; border-color:#2A2A2E}
+html[data-theme="dark"] .kv strong a{color:#F2F0EB}
+html[data-theme="dark"] .section{ border-color:#2A2A2E}
+html[data-theme="dark"] .lead{ color:#C9C9CE}
+html[data-theme="dark"] .filter{ background:#17171A; border-color:#2A2A2E; color:#F2F0EB}
+html[data-theme="dark"] .filter.active{ background:#F2F0EB; color:#111}
+html[data-theme="dark"] .card{ background:#17171A; border-color:#2A2A2E}
+html[data-theme="dark"] .card-top{ background:#1C1C1F; border-color:#2A2A2E}
+html[data-theme="dark"] .card p{ color:#C9C9CE}
+html[data-theme="dark"] .chip{ background:#1C1C1F; border-color:#2A2A2E; color:#E8E6E1}
+html[data-theme="dark"] .card-foot{ background:#17171A; border-color:#2A2A2E}
+html[data-theme="dark"] .card-foot a{ border-color:#2A2A2E}
+html[data-theme="dark"] .card-foot a.primary{ background:#F2F0EB; color:#111; border-color:#F2F0EB}
+html[data-theme="dark"] .panel{ background:#17171A; border-color:#2A2A2E}
+html[data-theme="dark"] .item{ background:#1C1C1F; border-color:#2A2A2E}
+html[data-theme="dark"] .item span{ color:#C9C9CE}
+html[data-theme="dark"] .tl{ background:#17171A; border-color:#2A2A2E}
+html[data-theme="dark"] .tl p{ color:#C9C9CE}
+html[data-theme="dark"] .form{ background:#17171A; border-color:#2A2A2E}
+html[data-theme="dark"] .field input, html[data-theme="dark"] .field textarea, html[data-theme="dark"] .field select{ background:#1C1C1F; border-color:#2A2A2E; color:#F2F0EB}
+html[data-theme="dark"] .contact-card{ background:#000; border-color:#2A2A2E}
+html[data-theme="dark"] footer{ background:#0F0F10; border-color:#2A2A2E; color:#9A9AA0}
+html[data-theme="dark"] .eyebrow{ color:#FF6B4A}
+html[data-theme="dark"] .h1 .outline{ -webkit-text-stroke-color:#3A3A3E}
+html[data-theme="dark"] .ambient{ background: var(--paper)}
+html[data-theme="dark"] .ambient::before{ opacity:.20}
+html[data-theme="dark"] .ambient::after{ opacity:.18}
+html[data-theme="dark"] .ambient .orb3{ opacity:.12}
+html[data-theme="dark"] #bgCanvas{ opacity:.9}
+html[data-theme="dark"] .theme-toggle{ background:#1C1C1F; border-color:#2A2A2E; color:#F2F0EB}
+
+/* DARK MODE — auto (when no manual choice) */
+@media (prefers-color-scheme: dark){
+  html:not([data-theme]){ --paper:#0F0F10; --ink:#F2F0EB; --ink2:#E8E6E1; --muted:#9A9AA0; --line:#1F1F22; --line2:#2A2A2E; --grid:#1A1A1E; --card:#17171A; --panel:#17171A; --soft:#1C1C1F; }
+  html:not([data-theme]) body{ background:var(--paper); color:var(--ink)}
+  html:not([data-theme]) .nav{ background:rgba(15,15,16,.92); border-color:#2A2A2E}
+  html:not([data-theme]) .hero{ border-color:#2A2A2E}
+  html:not([data-theme]) .hero-left{ border-color:#2A2A2E}
+  html:not([data-theme]) .pill{ background:#17171A; border-color:#2A2A2E; color:#E8E6E1}
+  html:not([data-theme]) .pill.orcid{ background:#FFB800 !important; color:#111 !important; border-color:#FFB800 !important}
+  html:not([data-theme]) .pill.orcid a{ color:#111 !important}
+  html:not([data-theme]) .kv.orcid{ background:#FFB800 !important; border-color:#FFB800 !important; color:#111 !important}
+  html:not([data-theme]) .card{ background:#17171A; border-color:#2A2A2E}
+  html:not([data-theme]) .card-top{ background:#1C1C1F; border-color:#2A2A2E}
+  html:not([data-theme]) .section{ border-color:#2A2A2E}
+  html:not([data-theme]) footer{ background:#0F0F10; border-color:#2A2A2E}
+}
+
+/* theme toggle button */
+.theme-toggle{
+  width:42px; height:42px; border:1.5px solid #111; background:#fff; display:grid; place-items:center;
+  cursor:pointer; font-size:16px; transition:.15s;
+}
+.theme-toggle:hover{ transform:translate(-1px,-1px); box-shadow:2px 2px 0 #111}
 
 /* responsive */
 @media (max-width: 980px){
@@ -382,7 +417,7 @@ footer{
 </style>
 </head>
 <body>
-<div class="ambient" aria-hidden="true"><div class="orb3"></div></div>
+<div class="ambient" aria-hidden="true"><canvas id="bgCanvas" aria-hidden="true"></canvas><div class="orb3"></div></div>
 
 <div class="hazard" aria-hidden="true"></div>
 
@@ -401,6 +436,7 @@ footer{
     <a href="#contact">Contact</a>
   </div>
   <div class="nav-cta">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle light/dark">◐</button>
     <a class="btn btn-ghost" href="https://github.com/Orpon-chanda" target="_blank" rel="noreferrer">GitHub →</a>
     <a class="btn" href="#contact">Hire / Contact</a>
     <button class="hamburger" id="hamburger" aria-label="Menu">≡</button>
@@ -447,7 +483,7 @@ footer{
         <div class="id-role">Lab Assistant · Dept. of EEE / CSE Lab</div>
         <div class="id-meta">
           <div class="kv"><small>Email</small><strong><a href="mailto:orpon137@gmail.com">orpon137@gmail.com</a></strong></div>
-          <div class="kv"><small>ORCID</small><strong><a href="https://orcid.org/0009-0004-3062-4989" target="_blank">0009-0004-3062-4989</a></strong></div>
+          <div class="kv orcid"><small>ORCID</small><strong><a href="https://orcid.org/0009-0004-3062-4989" target="_blank">0009-0004-3062-4989</a></strong></div>
           <div class="kv"><small>GitHub</small><strong><a href="https://github.com/Orpon-chanda" target="_blank">Orpon-chanda</a></strong></div>
           <div class="kv"><small>Location</small><strong>Sylhet, BD</strong></div>
         </div>
@@ -695,6 +731,89 @@ filters.forEach(b=>{
     });
   });
 });
+// theme toggle — auto respects system, manual overrides via localStorage
+(() => {
+  const btn = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  const saved = localStorage.getItem('theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) root.setAttribute('data-theme','dark');
+  const updateIcon = () => btn.textContent = root.getAttribute('data-theme')==='dark' ? '☀' : '☾';
+  updateIcon();
+  // listen to system changes if no manual choice
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (!localStorage.getItem('theme')) {
+      root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+      updateIcon();
+    }
+  });
+  btn.addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateIcon();
+  });
+})();
+
+// animated canvas background — subtle drifting dots + lines (visible in both themes)
+(() => {
+  const canvas = document.getElementById('bgCanvas');
+  if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = canvas.getContext('2d', { alpha: true });
+  let w, h, dpr, particles, raf;
+  const COUNT = 42;
+  const MAX_DIST = 150;
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.offsetWidth; h = canvas.offsetHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function init(){
+    particles = Array.from({length: COUNT}, () => ({
+      x: Math.random()*w, y: Math.random()*h,
+      vx: (Math.random()-0.5)*0.35, vy: (Math.random()-0.5)*0.35,
+      r: Math.random()*1.4 + 0.6
+    }));
+  }
+  function isDark(){ return document.documentElement.getAttribute('data-theme')==='dark' || (!document.documentElement.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches); }
+  function frame(){
+    ctx.clearRect(0,0,w,h);
+    const dark = isDark();
+    // update
+    for(const p of particles){
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0||p.x>w) p.vx*=-1;
+      if(p.y<0||p.y>h) p.vy*=-1;
+    }
+    // lines
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        const dist=Math.hypot(dx,dy);
+        if(dist<MAX_DIST){
+          const a = 1 - dist/MAX_DIST;
+          ctx.strokeStyle = dark ? `rgba(255,255,255,${a*0.07})` : `rgba(17,17,17,${a*0.08})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+        }
+      }
+    }
+    // dots
+    for(const p of particles){
+      ctx.fillStyle = dark ? 'rgba(255,255,255,0.55)' : 'rgba(17,17,17,0.45)';
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  resize(); init(); frame();
+  window.addEventListener('resize', () => { resize(); init(); });
+  // restart on theme change for color
+  const obs = new MutationObserver(()=>{});
+  obs.observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+})();
+
 function toast(){
   const t=document.getElementById('toast');
   t.style.display='block';
