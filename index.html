@@ -27,9 +27,9 @@
   --radius-pill:999px;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth; background: var(--paper)}
 body{
-  margin:0; background:var(--paper); color:var(--ink);
+  margin:0; background: transparent; color:var(--ink);
   font-family:"Space Grotesk", system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing:antialiased;
   position:relative;
@@ -39,7 +39,7 @@ body{
   position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none;
   background: var(--paper);
 }
-#bgCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; opacity:.55}
+#bgCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; opacity:.78}
 @media (prefers-reduced-motion: reduce){
   #bgCanvas{ opacity:.18 }
 }
@@ -93,7 +93,7 @@ img{max-width:100%; display:block}
 }
 .hero-left{
   padding:22px 20px 18px; border-right:1px solid var(--line2); position:relative; overflow:hidden;
-  background: rgba(255,251,245,0.72); backdrop-filter: blur(8px);
+  background: rgba(255,251,245,0.42); backdrop-filter: blur(6px);
 }
 .hero-left::before{ display:none }
 .h1{
@@ -282,7 +282,8 @@ html[data-theme="dark"]{
     --panel:#17171A;
     --soft:#1C1C1F;
 }
-html[data-theme="dark"] body{ background:var(--paper); color:var(--ink)}
+html[data-theme="dark"] body{ background: transparent; color:var(--ink)}
+html[data-theme="dark"]{ background: var(--paper)}
 html[data-theme="dark"] .nav{ background:rgba(15,15,16,.92); border-color:#2A2A2E}
 html[data-theme="dark"] .navlinks a:hover{border-color:#FF3B1F}
 html[data-theme="dark"] .brand-txt small, html[data-theme="dark"] .id-role{color:#9A9AA0}
@@ -291,7 +292,7 @@ html[data-theme="dark"] .hazard{ border-color:#2A2A2E}
 html[data-theme="dark"] .btn{ border-color:#2A2A2E}
 html[data-theme="dark"] .btn-ghost{ background:#1C1C1F; color:#F2F0EB; border-color:#2A2A2E}
 html[data-theme="dark"] .hero{ border-color:#2A2A2E}
-html[data-theme="dark"] .hero-left{ border-color:#2A2A2E; background: rgba(15,15,16,0.72); backdrop-filter: blur(8px)}
+html[data-theme="dark"] .hero-left{ border-color:#2A2A2E; background: rgba(15,15,16,0.48); backdrop-filter: blur(6px)}
 html[data-theme="dark"] .hero-left::before{ display:none}
 html[data-theme="dark"] .hero{ background: transparent}
 html[data-theme="dark"] .hero-sub, html[data-theme="dark"] .hero-sub strong{ color:#E8E6E1}
@@ -333,7 +334,7 @@ html[data-theme="dark"] footer{ background:#0F0F10; border-color:#2A2A2E; color:
 html[data-theme="dark"] .eyebrow{ color:#FF6B4A}
 html[data-theme="dark"] .h1 .outline{ -webkit-text-stroke-color:#3A3A3E}
 html[data-theme="dark"] .ambient{ background: var(--paper)}
-html[data-theme="dark"] #bgCanvas{ opacity:.62}
+html[data-theme="dark"] #bgCanvas{ opacity:.72}
 html[data-theme="dark"] .theme-toggle{ background:#1C1C1F; border-color:#2A2A2E; color:#F2F0EB; box-shadow: 0 2px 12px rgba(0,0,0,0.3)}
 
 /* DARK MODE — auto (when no manual choice) */
@@ -957,7 +958,7 @@ filters.forEach(b=>{
     // subtle vignette for readability (very light)
     // choose center based on viewport: slightly top-center
     const cx = w*0.50, cy = h*0.46;
-    const s = Math.min(w,h) < 700 ? 1.15 : 1.65;
+    const s = Math.min(w,h) < 700 ? 1.15 : 1.95;
     // global fade in/out at loop edges for soft looping
     const fade = t<0.04 ? t/0.04 : t>0.94 ? (1-t)/0.06 : 1;
     ctx.globalAlpha = fade;
